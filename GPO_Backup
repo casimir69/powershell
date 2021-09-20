@@ -1,3 +1,6 @@
+#=============================#
+#           Variables         #
+#=============================#
 Import-Module ActiveDirectory
 
 $date = get-date -format dd-MM-yyyy #Récupération de la date du jour
