@@ -12,9 +12,9 @@ Foreach($poste in $listeposte){
     $computer = (Get-ADComputer $poste).DistinguishedName
     if ($computer.MemberOf)
     if (Get-ADGroupMember -Id $group | $_.
-    write-host "ajout du poste "$poste
+    write-host "Ajout du poste "$poste
     $pdt = Get-ADComputer $poste | select -ExpandProperty SamAccountName
-    Write-Host "ajout du SamAccountName "$pdt
+    Write-Host "Ajout du SamAccountName "$pdt
     Add-ADGroupMember -Identity $group -Members $pdt -Server domain.fr #Attention la commande fonctionne avec le SamAccountName du poste et pas avec son name
     }
 
