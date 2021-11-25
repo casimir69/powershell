@@ -1,3 +1,10 @@
+<#
+.SYNOPSIS
+    Ce script Powershell permet d'ajouter des computer dans un groupe Active Directory
+.DESCRIPTION
+	Ce script Powershell va ajouter les computer que vous aurez préalablement indiqué dans un fichier .txt dans un groupe Active Directory de votre choix
+
+#>
 Import-module ActiveDirectory
 
 $group = "CN=LP_P_TaskForce-RebootForce_ACCEPT_PILOTE,OU=Groupes,OU=ADM-GPO,DC="
