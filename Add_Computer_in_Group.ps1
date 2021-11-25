@@ -9,8 +9,18 @@
 .NOTES
 	Ce script n'a pas besoin de permissions particulière
 #>
+$ErrorActionPreference = "Stop"
 
-Import-module ActiveDirectory
+If ( (Get-Module -Name ActiveDirectory -ErrorAction SilentlyContinue) -eq $null )
+{
+    Try {
+        Import-Module ActiveDirectory
+    } Catch {
+        Write-Error "Unable to load the module" -ErrorAction Continue
+        Write-Error $Error[1] -ErrorAction Continue
+        Exit 1
+    }
+}
 
 $group = "CN=LP_P_TaskForce-RebootForce_ACCEPT_PILOTE,OU=Groupes,OU=ADM-GPO,DC="
 $listeposte = Get-Content -Path c:\temp\listepdt.txt
