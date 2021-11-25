@@ -2,7 +2,8 @@
 .SYNOPSIS
         Ce script Powershell permet d'ajouter des computer dans un groupe Active Directory
 .DESCRIPTION
-	Ce script Powershell va ajouter les computer que vous aurez préalablement indiqué dans un fichier .txt dans un groupe Active Directory de votre choix
+	Ce script Powershell va ajouter les computer que vous aurez préalablement indiqué dans un fichier .txt dans un groupe Active Directory de votre choix.
+	Nous aurons besoin du DN du groupe cible
 .EXAMPLE
 	n/c
 .NOTES
