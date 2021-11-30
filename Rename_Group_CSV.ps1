@@ -6,9 +6,9 @@ $ImportGroups = Import-Csv "RenameGroups.csv"
 
 foreach ($Group in $ImportGroups)
 {
-  $OldName = $Group.OldName
-	$NewName = $Group.NewName
-	$GroupInAD = Get-ADGroup $Group.OldName
+    $OldName = $Group.OldName
+    $NewName = $Group.NewName
+    $GroupInAD = Get-ADGroup $Group.OldName
 	
     try
    {
