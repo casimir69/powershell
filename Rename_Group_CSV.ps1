@@ -12,7 +12,7 @@ foreach ($Group in $ImportGroups)
 	
     try
    {
-   		  "In try: working on $OldName"
+        "In try: working on $OldName"
         Set-ADGroup -Identity $GroupInAD -SamAccountName $NewName
         Rename-ADObject -Identity $GroupInAD -NewName $NewName
         Write-Output ($OldName + " has been renamed to " + $NewName)
@@ -20,7 +20,7 @@ foreach ($Group in $ImportGroups)
 
     catch
     {
-		"in Catch for $TempOldName"
+	"in Catch for $TempOldName"
         Write-Output "Error: $_"
     }
 }
