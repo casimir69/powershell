@@ -9,6 +9,8 @@
 	Ce script a besoin d'avoir des privilèges sur le domaine sur lequel on intervient
 #>
 
+$ImportGroups = Import-Csv "RenameGroups.csv"
+
 If ( (Get-Module -Name ActiveDirectory -ErrorAction SilentlyContinue) -eq $null )
 {
     Try {
@@ -19,8 +21,6 @@ If ( (Get-Module -Name ActiveDirectory -ErrorAction SilentlyContinue) -eq $null 
         Exit 1
     }
 }
-
-$ImportGroups = Import-Csv "RenameGroups.csv"
 
 foreach ($Group in $ImportGroups)
 {
