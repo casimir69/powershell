@@ -9,6 +9,17 @@
 	Ce script a besoin d'avoir des privilèges sur le domaine sur lequel on intervient
 #>
 
+If ( (Get-Module -Name ActiveDirectory -ErrorAction SilentlyContinue) -eq $null )
+{
+    Try {
+        Import-Module ActiveDirectory
+    } Catch {
+        Write-Error "Unable to load the module" -ErrorAction Continue
+        Write-Error $Error[1] -ErrorAction Continue
+        Exit 1
+    }
+}
+
 $ImportGroups = Import-Csv "RenameGroups.csv"
 
 foreach ($Group in $ImportGroups)
