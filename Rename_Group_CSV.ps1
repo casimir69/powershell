@@ -7,9 +7,12 @@
 
 .NOTES
 	Ce script a besoin d'avoir des privilèges sur le domaine sur lequel on intervient
+	
+.VERSIONNING
+	v1.2
 #>
 
-$ImportGroups = Import-Csv "RenameGroups.csv"
+$ImportGroups = Import-Csv "RenameGroups.csv" -delimiter ";"
 
 If ( (Get-Module -Name ActiveDirectory -ErrorAction SilentlyContinue) -eq $null )
 {
@@ -26,20 +29,21 @@ foreach ($Group in $ImportGroups)
 {
     $OldName = $Group.OldName
     $NewName = $Group.NewName
-    $NewDescription = $Group.NewDescription
-    $GroupInAD = Get-ADGroup $Group.OldName
+    [string]$NewDescription = $Group.NewDescription
+    $GroupInAD = Get-ADGroup -Identity $Group.OldName
 	
     try
    {
-        "In try: working on $OldName"
-        Set-ADGroup -Identity $GroupInAD -SamAccountName $NewName -Description $Group.NewDescription
+        Write-Host $OldName + " in transformation..." -ForegroundColor Green
+        Set-ADGroup -Identity $GroupInAD -SamAccountName $NewName -Description $NewDescription
         Rename-ADObject -Identity $GroupInAD -NewName $NewName
-        Write-Output ($OldName + " has been renamed to " + $NewName)
+        Write-Host $OldName + " a été renommé en " + $NewName + "-" + $NewDescription -ForegroundColor Green
+        Write-Host "... next ..." -BackgroundColor Yellow
     }
 
     catch
     {
-	"in Catch for $TempOldName"
+	"in Catch for $OldName"
         Write-Output "Error: $_"
     }
 }
