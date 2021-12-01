@@ -8,7 +8,7 @@
 .NOTES
 	Ce script a besoin d'avoir des privilèges sur le domaine sur lequel on intervient
 	
-.VERSIONNING
+.VERSIONING
 	v1.2
 #>
 
