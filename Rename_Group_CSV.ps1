@@ -4,12 +4,12 @@
 	
 .DESCRIPTION
 	Ce script Powershell va renommer des groupes AD en se basant sur un fichier ".csv" en entrée ($OldName,$NewName,$Description)
+	Ce script a besoin d'avoir des privilèges sur le domaine sur lequel on intervient
 
 .NOTES
-	Ce script a besoin d'avoir des privilèges sur le domaine sur lequel on intervient
-	
-.VERSIONING
-	v1.2
+	Version : 1.2
+	Auteur : Mix de différents codes trouvés sur le Net
+	Date : 01/12/2021
 #>
 
 ### variables ###
