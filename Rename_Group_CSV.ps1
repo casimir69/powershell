@@ -12,6 +12,7 @@
 	v1.2
 #>
 
+### variables ###
 $ImportGroups = Import-Csv "RenameGroups.csv" -delimiter ";"
 
 If ( (Get-Module -Name ActiveDirectory -ErrorAction SilentlyContinue) -eq $null )
@@ -25,6 +26,7 @@ If ( (Get-Module -Name ActiveDirectory -ErrorAction SilentlyContinue) -eq $null 
     }
 }
 
+### script ###
 foreach ($Group in $ImportGroups)
 {
     $OldName = $Group.OldName
