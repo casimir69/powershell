@@ -1,14 +1,26 @@
-#==========================================================================================#
-#  Disable_LocalAdmin_Account.ps1
-#==========================================================================================#
-#  Script de desactivation des comptes AL et -A sur le domaine sur lequel vous l'executez  #
-#  V1.0 : 26/11/2019                                                                       #
-#==========================================================================================#
+<#
+.SYNOPSIS
+        Script de desactivation des comptes AL et -A sur le domaine sur lequel vous l'executez
+.DESCRIPTION
+	
+.EXAMPLE
+	n/c
+.NOTES
+	Ce script n'a pas besoin de permissions particulière
+#>
+$ErrorActionPreference = "Stop"
 
-#=============================#
-#           Variables         #
-#=============================#
-Import-Module ActiveDirectory
+If ( (Get-Module -Name ActiveDirectory -ErrorAction SilentlyContinue) -eq $null )
+{
+    Try {
+        Import-Module ActiveDirectory
+    } Catch {
+        Write-Error "Unable to load the module" -ErrorAction Continue
+        Write-Error $Error[1] -ErrorAction Continue
+        Exit 1
+    }
+}
+
 $Path = Get-Location
 $DateTime = Get-Date -Format "[dd/MM/yyyy][HH:mm:ss]"
 #================#
