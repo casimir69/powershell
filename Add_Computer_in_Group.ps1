@@ -11,7 +11,7 @@
 #>
 $ErrorActionPreference = "Stop"
 
-If ( (Get-Module -Name ActiveDirectory -ErrorAction SilentlyContinue) -eq $null )
+If ((Get-Module -Name ActiveDirectory -ErrorAction SilentlyContinue) -eq $null)
 {
     Try {
         Import-Module ActiveDirectory
