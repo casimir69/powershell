@@ -4,7 +4,7 @@ $fqdnDomainName = $(Get-WmiObject -Class Win32_ComputerSystem).Domain
 $fqdnLocalComputer = $localComputerName + "." + $fqdnDomainName
 $scriptFullPath = $MyInvocation.MyCommand.Definition
 $drives = Get-PSDrive -PSProvider FileSystem
-$logfile = ("C:\Temp\ScanForLog4jOnWin_"+(Get-date -Format 'yyyy-MM-dd')+".log")
+$logfile = ("C:\Temp\ScanForLog4jOnWin_"+ $localComputerName +"_"+(Get-date -Format 'yyyy-MM-dd')+".log")
 
 Clear-Content $logfile
 
@@ -14,7 +14,7 @@ Add-Content $logfile "Date/Time.........................: $execDateTime"
 Add-Content $logfile "Local Computer....................: $fqdnLocalComputer"
 Add-Content $logfile "Domain Name.......................: $fqdnDomainName"
 Add-Content $logfile "Script Full Path..................: $scriptFullPath"
-Add-Content $logfile ""
+Add-Content $logfile ".................................."
 
 Foreach ($drive in $drives)
   {
