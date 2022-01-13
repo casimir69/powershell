@@ -37,7 +37,7 @@ Foreach($poste in $listeposte){
     write-host "Ajout du poste "$poste
     $pdt = Get-ADComputer $poste | select -ExpandProperty SamAccountName
     Write-Host "Ajout du SamAccountName "$pdt
-    Add-ADGroupMember -Identity $group -Members $pdt -Server domain.fr #Attention la commande fonctionne avec le SamAccountName du poste et pas avec son name
+    Add-ADGroupMember -Identity $group -Members $pdt -Server domain.fr #Attention la commande fonctionne avec le SamAccountName du poste et pas avec son DisplayName
     }
 
 $nbrposteap = (Get-ADGroup $group -Properties member).member.Count
