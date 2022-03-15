@@ -20,23 +20,24 @@ If ((Get-Module -Name ActiveDirectory -ErrorAction SilentlyContinue) -eq $null)
         Exit 1
     }
 }
-
+$ListeUsers = Import-Csv -Path "UsersToGroup.csv" -Delimiter ";"
 $GroupBefore = 
-$GroupAfter = 
-$ListeUsers = Import-Csv -Path "add_to_dns.csv" -Delimiter ";"
+$GroupAfter1 = 
 
-Write-Host "### Debut du script ###"
+
+
 
 ForEach ($User in $ListeUsers)
   {
+  $UserDispaly = 
   if ($membersGroup -contains $User)
       {
       Remove-AdGroupMember -Identity $GroupBefore -Members $User -Confirm:$false
-      Write-host "Suppression de l'utilisateur" $User "du groupe" $GroupBefore
+      Write-host "Suppression de l'utilisateur "$User" du groupe "$GroupBefore
       }
       else
           {
-          Write-Host "L'utilisateur" $User "n est pas présent dans le groupe" $GroupBefore
+          Write-Host "L'utilisateur "$User" n est pas présent dans le groupe "$GroupBefore
           }
           
   }
