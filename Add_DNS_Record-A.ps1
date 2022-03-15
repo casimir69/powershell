@@ -16,7 +16,7 @@ ForEach ($record in $records)
     #Write-Host $exist
     #if ($exist -eq $false)
      #   {
-        Write-Host "Ajout DNS - Record A de la machine "$record.computer" en "$record.ip""
+        Write-Host "Ajout DNS - Record A de la machine "$record.computer" en "$record.ip"
         Add-DnsServerResourceRecordA -Name $record.computer -IPv4Address $record.ip -ZoneName $fqdnDomainName -ErrorAction SilentlyContinue
         Start-Sleep -Seconds 1
         #Add-DnsServerResourceRecordPtr -ComputerName "DnsServer" 
