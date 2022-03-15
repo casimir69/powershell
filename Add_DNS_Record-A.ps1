@@ -10,7 +10,7 @@ Write-Host "#    Attention, pas de guillements dans le fichier .csv   #"
 Write-Host "###########################################################"
 Write-Host ""
 
-foreach ($record in $records)
+ForEach ($record in $records)
     {
     #$exist = Get-DnsServerResourceRecord -Zonename $fqdnDomainName -RRtype A -Name $record.computer -ErrorAction SilentlyContinue
     #Write-Host $exist
