@@ -20,25 +20,36 @@ If ((Get-Module -Name ActiveDirectory -ErrorAction SilentlyContinue) -eq $null)
         Exit 1
     }
 }
-$ListeUsers = Import-Csv -Path "UsersToGroup.csv" -Delimiter ";"
-$GroupBefore = 
-$GroupAfter1 = 
+$ListeUsers = Import-Csv -Path "\UsersToGroup.csv" -Delimiter ";"
 
-
-
-
-ForEach ($User in $ListeUsers)
+ForEach ($Ligne in $ListeUsers)
   {
-  $UserDispaly = 
-  if ($membersGroup -contains $User)
+  $UserName = $Ligne.DisplayName
+  $TeamGroup = $Ligne.TeamGroup
+  
+  $DeleteGroup = $ListeUser.DeleteGroup
+  $AddGroup1 = $ListeUser.AddGroup1
+  $AddGroup2 = $ListeUser.AddGroup2
+  $AddGroup3 = $ListeUser.AddGroup3
+  $AddGroup4 = $ListeUser.AddGroup4
+  $AddGroup5 = $ListeUser.AddGroup5
+  $AddGroup6 = $ListeUser.AddGroup6
+  $AddGroup7 = $ListeUser.AddGroup7
+  $AddGroup8 = $ListeUser.AddGroup8
+  
+  if ($TeamGroup -contains $UserName)
       {
-      Remove-AdGroupMember -Identity $GroupBefore -Members $User -Confirm:$false
-      Write-host "Suppression de l'utilisateur "$User" du groupe "$GroupBefore
+      Write-host "L'utilisateur "$UserName" est déjà dans le groupe "$TeamGroup
       }
       else
           {
-          Write-Host "L'utilisateur "$User" n est pas présent dans le groupe "$GroupBefore
+	  Add-ADGroupMember
+          Write-Host "L'utilisateur "$UserName" n est pas présent dans le groupe "$DeleteGroup
           }
-          
+          if ($DeleteGroup -contains $UserName)
+	     {
+             Remove-AdGroupMember -Identity $DeleteGroup -Members $UserName -Confirm:$false
+             Write-host "Suppression de l'utilisateur "$UserName" du groupe "$DeleteGroup
+             }
   }
 Write-Host "### Fin du script ###"
