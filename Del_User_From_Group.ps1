@@ -1,5 +1,25 @@
+<#
+.SYNOPSIS
+        Ce script Powershell permet de supprimer des users d'un groupe Active Directory en vérifiant sa présence au préalable
+.DESCRIPTION
+	Ce script Powershell 
+.EXAMPLE
+	n/c
+.NOTES
+	Ce script n'a pas besoin de permissions particulière
+#>
+$ErrorActionPreference = "Stop"
 
-Import-Module ActiveDirectory
+If ((Get-Module -Name ActiveDirectory -ErrorAction SilentlyContinue) -eq $null)
+{
+    Try {
+        Import-Module ActiveDirectory
+    } Catch {
+        Write-Error "Unable to load the module" -ErrorAction Continue
+        Write-Error $Error[1] -ErrorAction Continue
+        Exit 1
+    }
+}
 
 $GroupBefore = 
 $GroupAfter = 
@@ -18,3 +38,4 @@ ForEach ($User in $ListeUsers)
           }
           
   }
+Write-Host Terminé
