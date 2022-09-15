@@ -1,12 +1,8 @@
 <#
-.SYNOPSIS
-        Ce script Powershell permet de supprimer des users d'un groupe Active Directory en vérifiant sa présence au préalable
 .DESCRIPTION
-	Ce script Powershell 
-.EXAMPLE
-	n/c
-.NOTES
-	Ce script n'a pas besoin de permissions particulière
+        Ce script Powershell permet de supprimer des users d'un groupe Active Directory en vérifiant sa présence au préalable
+.AUTHOR
+	Casimir69
 #>
 $ErrorActionPreference = "Stop"
 
@@ -22,7 +18,9 @@ If ((Get-Module -Name ActiveDirectory -ErrorAction SilentlyContinue) -eq $null)
 }
 $ListeUsers = Import-Csv -Path "\UsersToGroup.csv" -Delimiter ";"
 
-ForEach ($Ligne in $ListeUsers)
+Write-Host "##### Début du script Del_User_From_Group #####"
+
+ForEach ($Ligne IN $ListeUsers)
   {
   $UserName = $Ligne.DisplayName
   $TeamGroup = $Ligne.TeamGroup
@@ -44,12 +42,12 @@ ForEach ($Ligne in $ListeUsers)
       else
           {
 	  Add-ADGroupMember
-          Write-Host "L'utilisateur "$UserName" n est pas présent dans le groupe "$DeleteGroup
+          Write-Host "L'utilisateur $UserName n est pas présent dans le groupe $DeleteGroup"
           }
           if ($DeleteGroup -contains $UserName)
 	     {
              Remove-AdGroupMember -Identity $DeleteGroup -Members $UserName -Confirm:$false
-             Write-host "Suppression de l'utilisateur "$UserName" du groupe "$DeleteGroup
+             Write-host "Suppression de l'utilisateur $UserName du groupe $DeleteGroup"
              }
   }
-Write-Host "### Fin du script ###"
+Write-Host "##### Fin du script Del_User_From_Group #####"
