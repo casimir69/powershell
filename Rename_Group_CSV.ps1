@@ -1,19 +1,13 @@
 <#
-.SYNOPSIS
-        Ce script Powershell permet de renommer en masse des groupes Active Directory
-	
 .DESCRIPTION
-	Ce script Powershell va renommer des groupes AD en se basant sur un fichier ".csv" en entrée ($OldName,$NewName,$Description)
-	Ce script a besoin d'avoir des privilèges sur le domaine sur lequel on intervient
+	Ce script va renommer des groupes AD en se basant sur un fichier ".csv" en entrée ($OldName,$NewName,$Description)
+	Ce script a besoin d'être executé avec des privilèges sur le domaine cible
 
-.NOTES
-	Version : 1.2
-	Auteur : Mix de différents codes trouvés sur le Net
-	Date : 01/12/2021
+.AUTHOR
+	casimir69
 #>
 
-### variables ###
-$ImportGroups = Import-Csv "RenameGroups.csv" -delimiter ";"
+### module ###
 
 If ( (Get-Module -Name ActiveDirectory -ErrorAction SilentlyContinue) -eq $null )
 {
@@ -26,11 +20,14 @@ If ( (Get-Module -Name ActiveDirectory -ErrorAction SilentlyContinue) -eq $null 
     }
 }
 
+### variables ###
+$ImportGroups = Import-Csv "RenameGroups.csv" -delimiter ";"
+
 ### script ###
 foreach ($Group in $ImportGroups)
 {
-    $OldName = $Group.OldName
-    $NewName = $Group.NewName
+    [string]$OldName = $Group.OldName
+    [string]$NewName = $Group.NewName
     [string]$NewDescription = $Group.NewDescription
     $GroupInAD = Get-ADGroup -Identity $Group.OldName
 	
