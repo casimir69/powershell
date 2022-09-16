@@ -1,22 +1,34 @@
 <#
 .DESCRIPTION
-Check pwdLastSet date for krbtgt account (less than 6 month)
-Vérifié dans PGC si plus de 365 jours
+        Check pwdLastSet date for krbtgt account (less than 6 month)
+        Vérifié dans Ping Castle si plus de 365 jours
 
-.AUTEUR
-casimir69
+.AUTHOR
+        casimir69
 #>
 
-Import-Module ActiveDirectory
+##### module #####
+If ( (Get-Module -Name ActiveDirectory -ErrorAction SilentlyContinue) -eq $null )
+{
+    Try {
+        Import-Module ActiveDirectory
+    } Catch {
+        Write-Error "Unable to load the module" -ErrorAction Continue
+        Write-Error $Error[1] -ErrorAction Continue
+        Exit 1
+    }
+}
 
-[string]$version = "v20220916"
+##### variable #####
+[string]$scriptVersion = "v20220916"
 [string]$domain = $env:USERDOMAIN
+[string]$env = MQT #PROD or MQT
 [string]$currentDate = (Get-Date).Date.AddDays(-180).ToFileTime()
 [string]$logfile = "$PSScriptRoot\Check_KRBTGT_"+ $domain +".log"
 $accounts = Get-ADUser -Filter * -Properties Name, ServicePrincipalName, pwdLastSet, PasswordLastSet | Where-Object {$_.ServicePrincipalName -Like "kadmin/changepw"}
 
-Add-Content $logfile "[$(Get-Date -Format "dd/MM/yyyy_HH:mm:ss")] ### Début du script Check_KRBTGT $version ###"
-Write-Host "[$(Get-Date -Format "dd/MM/yyyy_HH:mm:ss")] ### Début du script Check_KRBTGT $version ###"
+Add-Content $logfile "[$(Get-Date -Format "dd/MM/yyyy_HH:mm:ss")] ### Début du script Check_KRBTGT - $scriptVersion ###"
+Write-Host "[$(Get-Date -Format "dd/MM/yyyy_HH:mm:ss")] ### Début du script Check_KRBTGT - $scriptVersion ###"
 
 ##### Fonction #####
 Function Mail
@@ -29,7 +41,6 @@ Function Mail
     [string]$mailEncoding = "UTF8"
     [string]$smtpServer = "IP"
     [int]$port = "25"
-    [string]$env = MQT    #PROD or MQT
     [string]$from = "Check_$domain@domain.fr"
     [string]$to =  "mailTo@domain.fr"
     [string]$bcc = "mailBcc@domain.fr"
