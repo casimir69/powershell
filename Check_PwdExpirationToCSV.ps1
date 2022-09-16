@@ -1,15 +1,16 @@
 <#
 .DESCRIPTION
-Notifier la futur expiration du mot de passe des comptes de services
-Vérifié dans Ping Castle
+        Notifier la futur expiration du mot de passe des comptes de services
+        Vérifié dans Ping Castle
 
-.AUTEUR
-casimir69
+.AUTHOR
+        casimir69
 #>
 
 Import-Module ActiveDirectory
 
-[string]$version = "v20220916"
+##### variable #####
+[string]$scriptVersion = "v20220916"
 [datetime]$currentDate = (Get-Date).Date.AddDays(-159) #159j correspond à 21j avant l'expiration
 [string]$domain = $env:USERDOMAIN
 [string]$env = MQT #PROD or MQT
@@ -17,8 +18,8 @@ Import-Module ActiveDirectory
 [string]$logfile = "$PSScriptRoot\Checks_PwdExpirationToCSV_"+ $domain +".log"
 $accounts = Get-ADUser -Filter * -Properties Name, PasswordExpired, PasswordLastSet | where {$_.sAMAccountName -Like "CSV_*"} | where {$_.Enabled -eq "True"} 
 
-Add-Content $logfile "[$(Get-Date -Format "dd/MM/yyyy_HH:mm:ss")] ### Début du script Check_PwdExpirationToCSV - $version ###"
-Write-Host "[$(Get-Date -Format "dd/MM/yyyy_HH:mm:ss")] ### Début du script Check_PwdExpirationToCSV - $version ###"
+Add-Content $logfile "[$(Get-Date -Format "dd/MM/yyyy_HH:mm:ss")] ### Début du script Check_PwdExpirationToCSV - $scriptVersion ###"
+Write-Host "[$(Get-Date -Format "dd/MM/yyyy_HH:mm:ss")] ### Début du script Check_PwdExpirationToCSV - $scriptVersion ###"
 
 ##### Fonction #####
 Function Mail
@@ -40,8 +41,8 @@ Function Mail
 
     Send-MailMessage -SmtpServer $smtpServer -Port $port -From $from -To $to -Bcc $bcc -Subject $subject -Body $body -bodyasHTML -Attachments $logfile -Encoding $mailEncoding
     }
-####################
 
+##### script #####
 foreach ($account IN $accounts)
     {
     [string]$SamAccountName = $account.SamAccountName
