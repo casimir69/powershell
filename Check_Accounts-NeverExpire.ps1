@@ -1,14 +1,26 @@
 <#
 .DESCRIPTION
-Check la présence de l'option "Never-Expire" sur tout les comptes du domaine.
+        Check la présence de l'option "Never-Expire" sur tout les comptes du domaine, 
+        le script génère un fichier log et envoi une notification par mail avec le fichier log en pièce jointe
 
-.AUTEUR
-casimir69
+.AUTHOR
+        casimir69
 #>
 
-Import-Module ActiveDirectory
+##### module #####
+If ( (Get-Module -Name ActiveDirectory -ErrorAction SilentlyContinue) -eq $null )
+{
+    Try {
+        Import-Module ActiveDirectory
+    } Catch {
+        Write-Error "Unable to load the module" -ErrorAction Continue
+        Write-Error $Error[1] -ErrorAction Continue
+        Exit 1
+    }
+}
 
-[string]$version = "v20220916"
+##### variable #####
+[string]$scriptVersion = "v20220916"
 [int]$nbrAccount = "0"
 [int]$nbrAccountNE = "0"
 [string]$env = MQT    #PROD or MQT
@@ -16,8 +28,8 @@ Import-Module ActiveDirectory
 [string]$logfile = "$PSScriptRoot\Checks_Account-NeverExpire_"+ $domain +".log"
 $users = Get-ADUser -Filter * -Properties Name, PasswordNeverExpires
 
-Add-Content $logfile "[$(Get-Date -Format "dd/MM/yyyy_HH:mm:ss")] ### Début du script Check_Accounts-NeverExpire - $version ###"
-Write-Host "[$(Get-Date -Format "dd/MM/yyyy_HH:mm:ss")] ### Début du script Check_Accounts-NeverExpire - $version ###"
+Add-Content $logfile "[$(Get-Date -Format "dd/MM/yyyy_HH:mm:ss")] ### Début du script Check_Accounts-NeverExpire - $scriptVersion ###"
+Write-Host "[$(Get-Date -Format "dd/MM/yyyy_HH:mm:ss")] ### Début du script Check_Accounts-NeverExpire - $scriptVersion ###"
 
 ##### Fonction #####
 Function Mail
@@ -39,8 +51,8 @@ Function Mail
 
     Send-MailMessage -SmtpServer $smtpServer -Port $port -From $from -To $to -Bcc $bcc -Subject $subject -Body $body -bodyasHTML -Attachments $logfile -Encoding $mailEncoding
     }
-####################
 
+##### script #####
 foreach ($user IN $users)
     {
     [string]$name = $user.SamAccountName
