@@ -7,7 +7,17 @@
         casimir69
 #>
 
-Import-Module ActiveDirectory
+##### module #####
+If ( (Get-Module -Name ActiveDirectory -ErrorAction SilentlyContinue) -eq $null )
+{
+    Try {
+        Import-Module ActiveDirectory
+    } Catch {
+        Write-Error "Unable to load the module" -ErrorAction Continue
+        Write-Error $Error[1] -ErrorAction Continue
+        Exit 1
+    }
+}
 
 ##### variable #####
 [string]$scriptVersion = "v20220916"
