@@ -12,26 +12,28 @@ If ( (Get-Module -Name ActiveDirectory -ErrorAction SilentlyContinue) -eq $null 
 {
     Try {
         Import-Module ActiveDirectory
-    } Catch {
-        Write-Error "Unable to load the module" -ErrorAction Continue
-        Write-Error $Error[1] -ErrorAction Continue
-        Exit 1
+        }
+        Catch {
+              Write-Error "Unable to load the module" -ErrorAction Continue
+              Write-Error $Error[1] -ErrorAction Continue
+              Exit 1
     }
 }
 
 ##### variable #####
-[string]$scriptVersion = "v20220916"
+[string]$scriptVersion = "v20220919"
 [datetime]$currentDate = (Get-Date).Date.AddDays(-159) #159j correspond à 21j avant l'expiration
+[bool]$mailreport = 0              #1 or 0 or True or False
 [string]$domain = $env:USERDOMAIN
-[string]$env = MQT #PROD or MQT
+[string]$env = MQT                 #PROD or MQT
 [int]$nbrAccountNE = "0"
 [string]$logfile = "$PSScriptRoot\Checks_PwdExpirationToCSV_"+ $domain +".log"
 $accounts = Get-ADUser -Filter * -Properties Name, PasswordExpired, PasswordLastSet | where {$_.sAMAccountName -Like "CSV_*"} | where {$_.Enabled -eq "True"} 
 
-Add-Content $logfile "[$(Get-Date -Format "dd/MM/yyyy_HH:mm:ss")] ### Début du script Check_PwdExpirationToCSV - $scriptVersion ###"
-Write-Host "[$(Get-Date -Format "dd/MM/yyyy_HH:mm:ss")] ### Début du script Check_PwdExpirationToCSV - $scriptVersion ###"
+Add-Content $logfile "[$(Get-Date -Format "dd/MM/yyyy_HH:mm:ss")] ### Début du script Check_PwdExpirationToCSV.ps1 - $scriptVersion ###"
+Write-Host "[$(Get-Date -Format "dd/MM/yyyy_HH:mm:ss")] ### Début du script Check_PwdExpirationToCSV.ps1 - $scriptVersion ###"
 
-##### Fonction #####
+##### fonction #####
 Function Mail
     {
     param(
@@ -72,7 +74,10 @@ foreach ($account IN $accounts)
     }
     if ($nbrAccountNE -gt "0")
         {
-        Mail "[$env][$domain] Expiration du mdp des comptes CSV (j-21)" "Le mot de passe d'un ou plusieurs comptes de service sont à renouveler, merci d'y remédier. Voir la pièce jointe pour plus de détails"
+        if ($mailreport -eq true)
+            {
+            Mail "[$env][$domain] Expiration du mdp des comptes CSV (j-21)" "Le mot de passe d'un ou plusieurs comptes de service sont à renouveler, merci d'y remédier. Voir la pièce jointe pour plus de détails"
+            }
         }
-        Add-Content $logfile "[$(Get-Date -Format "dd/MM/yyyy_HH:mm:ss")] ### Fin du script Check_PwdExpirationToCSV ###"
-        Write-Host "[$(Get-Date -Format "dd/MM/yyyy_HH:mm:ss")] ### Fin du script Check_PwdExpirationToCSV ###"
+        Add-Content $logfile "[$(Get-Date -Format "dd/MM/yyyy_HH:mm:ss")] ### Fin du script Check_PwdExpirationToCSV.ps1 ###"
+        Write-Host "[$(Get-Date -Format "dd/MM/yyyy_HH:mm:ss")] ### Fin du script Check_PwdExpirationToCSV.ps1 ###"
