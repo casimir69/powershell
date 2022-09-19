@@ -20,11 +20,11 @@ If ( (Get-Module -Name ActiveDirectory -ErrorAction SilentlyContinue) -eq $null 
 }
 
 ##### variable #####
-[string]$scriptVersion = "v20220916"
-[bool]$mailreport = 0
+[string]$scriptVersion = "v20220919"
+[bool]$mailreport = 0            #1 or 0 or True or False
 [int]$nbrAccount = "0"
 [int]$nbrAccountNE = "0"
-[string]$env = MQT    #PROD or MQT
+[string]$env = MQT               #PROD or MQT
 [string]$domain = $env:USERDOMAIN
 [string]$logfile = "$PSScriptRoot\Checks_Account-NeverExpire_"+ $domain +".log"
 $users = Get-ADUser -Filter * -Properties Name, PasswordNeverExpires
