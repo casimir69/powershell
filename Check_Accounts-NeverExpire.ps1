@@ -29,8 +29,8 @@ If ( (Get-Module -Name ActiveDirectory -ErrorAction SilentlyContinue) -eq $null 
 [string]$logfile = "$PSScriptRoot\Checks_Account-NeverExpire_"+ $domain +".log"
 $users = Get-ADUser -Filter * -Properties Name, PasswordNeverExpires
 
-Add-Content $logfile "[$(Get-Date -Format "dd/MM/yyyy_HH:mm:ss")] ### Début du script Check_Accounts-NeverExpire - $scriptVersion ###"
-Write-Host "[$(Get-Date -Format "dd/MM/yyyy_HH:mm:ss")] ### Début du script Check_Accounts-NeverExpire - $scriptVersion ###"
+Add-Content $logfile "[$(Get-Date -Format "dd/MM/yyyy_HH:mm:ss")] ### Début du script Check_Accounts-NeverExpire.ps1 - $scriptVersion ###"
+Write-Host "[$(Get-Date -Format "dd/MM/yyyy_HH:mm:ss")] ### Début du script Check_Accounts-NeverExpire.ps1 - $scriptVersion ###"
 
 ##### fonction #####
 Function Mail
@@ -74,9 +74,9 @@ foreach ($user IN $users)
     if ($nbrAccountNE -gt "0")
         {
         if ($mailreport -eq true)
-                {
-                Mail "[$env][$domain] Compte(s) en Never-Expire" "Un ou plusieurs compte(s) on(t) l'option Never-Expire d'activée(s) ce qui n'est pas recommandé, merci d'y remédier. Voir la pièce jointe pour plus de détails"
-                }
+             {
+             Mail "[$env][$domain] Compte(s) en Never-Expire" "Un ou plusieurs compte(s) on(t) l'option Never-Expire d'activée(s) ce qui n'est pas recommandé, merci d'y remédier. Voir la pièce jointe pour plus de détails"
+             }
         }
-        Add-Content $logfile "[$(Get-Date -Format "dd/MM/yyyy_HH:mm:ss")] ### Fin du script Check_Accounts-NeverExpire - $nbrAccount comptes locaux ###"
-        Write-Host "[$(Get-Date -Format "dd/MM/yyyy_HH:mm:ss")] ### Fin du script Check_Accounts-NeverExpire - $nbrAccount comptes locaux ###"
+        Add-Content $logfile "[$(Get-Date -Format "dd/MM/yyyy_HH:mm:ss")] ### Fin du script Check_Accounts-NeverExpire.ps1 - $nbrAccount comptes locaux ###"
+        Write-Host "[$(Get-Date -Format "dd/MM/yyyy_HH:mm:ss")] ### Fin du script Check_Accounts-NeverExpire.ps1 - $nbrAccount comptes locaux ###"
