@@ -21,6 +21,7 @@ If ( (Get-Module -Name ActiveDirectory -ErrorAction SilentlyContinue) -eq $null 
 
 ##### variable #####
 [string]$scriptVersion = "v20220916"
+[bool]$mailreport = 0
 [int]$nbrAccount = "0"
 [int]$nbrAccountNE = "0"
 [string]$env = MQT    #PROD or MQT
@@ -72,7 +73,10 @@ foreach ($user IN $users)
     }    
     if ($nbrAccountNE -gt "0")
         {
-        Mail "[$env][$domain] Compte(s) en Never-Expire" "Un ou plusieurs compte(s) on(t) l'option Never-Expire d'activée(s) ce qui n'est pas recommandé, merci d'y remédier. Voir la pièce jointe pour plus de détails"
+        if ($mailreport -eq true)
+                {
+                Mail "[$env][$domain] Compte(s) en Never-Expire" "Un ou plusieurs compte(s) on(t) l'option Never-Expire d'activée(s) ce qui n'est pas recommandé, merci d'y remédier. Voir la pièce jointe pour plus de détails"
+                }
         }
         Add-Content $logfile "[$(Get-Date -Format "dd/MM/yyyy_HH:mm:ss")] ### Fin du script Check_Accounts-NeverExpire - $nbrAccount comptes locaux ###"
         Write-Host "[$(Get-Date -Format "dd/MM/yyyy_HH:mm:ss")] ### Fin du script Check_Accounts-NeverExpire - $nbrAccount comptes locaux ###"
