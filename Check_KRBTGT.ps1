@@ -20,17 +20,18 @@ If ( (Get-Module -Name ActiveDirectory -ErrorAction SilentlyContinue) -eq $null 
 }
 
 ##### variable #####
-[string]$scriptVersion = "v20220916"
+[string]$scriptVersion = "v20220919"
 [string]$domain = $env:USERDOMAIN
-[string]$env = MQT #PROD or MQT
+[bool]$mailreport = 0            #1 or 0 or True or False
+[string]$env = MQT               #PROD or MQT
 [string]$currentDate = (Get-Date).Date.AddDays(-180).ToFileTime()
 [string]$logfile = "$PSScriptRoot\Check_KRBTGT_"+ $domain +".log"
 $accounts = Get-ADUser -Filter * -Properties Name, ServicePrincipalName, pwdLastSet, PasswordLastSet | Where-Object {$_.ServicePrincipalName -Like "kadmin/changepw"}
 
-Add-Content $logfile "[$(Get-Date -Format "dd/MM/yyyy_HH:mm:ss")] ### Début du script Check_KRBTGT - $scriptVersion ###"
-Write-Host "[$(Get-Date -Format "dd/MM/yyyy_HH:mm:ss")] ### Début du script Check_KRBTGT - $scriptVersion ###"
+Add-Content $logfile "[$(Get-Date -Format "dd/MM/yyyy_HH:mm:ss")] ### Début du script Check_KRBTGT.ps1 - $scriptVersion ###"
+Write-Host "[$(Get-Date -Format "dd/MM/yyyy_HH:mm:ss")] ### Début du script Check_KRBTGT.ps1 - $scriptVersion ###"
 
-##### Fonction #####
+##### fonction #####
 Function Mail
     {
     param(
@@ -51,7 +52,7 @@ Function Mail
     Send-MailMessage -SmtpServer $smtpServer -Port $port -From $from -To $to -Bcc $bcc -Subject $subject -Body $body -bodyasHTML -Attachments $logfile -Encoding $mailEncoding
     }
 
-### Script
+##### script #####
 foreach ($krbtgt IN $accounts)
     {
     [string]$kname = $krbtgt.Name
@@ -61,7 +62,10 @@ foreach ($krbtgt IN $accounts)
         {
         Add-Content $logfile "[$(Get-Date -Format "dd/MM/yyyy_HH:mm:ss")] Il faut renouveler le password du compte $kname d'$domain qui date du $kpls (US date)"
         Write-Host "[$(Get-Date -Format "dd/MM/yyyy_HH:mm:ss")] Il faut renouveler le password du compte $kname d'$domain qui date du $kpls (US date)" -BackgroundColor DarkRed
-        Mail "[$env][$domain] Compte krbtgt : Renouvellement du mot de passe" "Le mot de passe du compte krbtgt du domaine $domain.edf.fr a plus de 6 mois ($kpls US date), il faut le renouveller !"
+        if ($mailreport -eq true)
+            {
+            Mail "[$env][$domain] Compte krbtgt : Renouvellement du mot de passe" "Le mot de passe du compte krbtgt du domaine $domain.edf.fr a plus de 6 mois ($kpls US date), il faut le renouveller !"
+            }
         }
         else
             {
@@ -69,5 +73,5 @@ foreach ($krbtgt IN $accounts)
             Write-host "[$(Get-Date -Format "dd/MM/yyyy_HH:mm:ss")] Le mot de passe du compte $kname a moins de 6 mois"
             }
     }
-Add-Content $logfile "[$(Get-Date -Format "dd/MM/yyyy_HH:mm:ss")] ### Fin du script Check_KRBTGT ###"
-Write-Host "[$(Get-Date -Format "dd/MM/yyyy_HH:mm:ss")] ### Fin du script Check_KRBTGT ###"
+Add-Content $logfile "[$(Get-Date -Format "dd/MM/yyyy_HH:mm:ss")] ### Fin du script Check_KRBTGT.ps1 ###"
+Write-Host "[$(Get-Date -Format "dd/MM/yyyy_HH:mm:ss")] ### Fin du script Check_KRBTGT.ps1 ###"
