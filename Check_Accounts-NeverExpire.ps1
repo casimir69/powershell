@@ -3,13 +3,13 @@
         Check la présence de l'option "Never-Expire" sur tout les comptes du domaine, 
         le script génère un fichier log et envoi une notification par mail avec le fichier log en pièce jointe
 
-.AUTHOR
-        casimir69
+.NOTES
+        Author: casimir69
 #>
 
 ##### module #####
-If ( (Get-Module -Name ActiveDirectory -ErrorAction SilentlyContinue) -eq $null )
-{
+If ((Get-Module -Name ActiveDirectory -ErrorAction SilentlyContinue) -eq $null )
+    {
     Try {
         Import-Module ActiveDirectory
         }
@@ -17,8 +17,8 @@ If ( (Get-Module -Name ActiveDirectory -ErrorAction SilentlyContinue) -eq $null 
               Write-Error "Unable to load the module" -ErrorAction Continue
               Write-Error $Error[1] -ErrorAction Continue
               Exit 1
+              }
     }
-}
 
 ##### variable #####
 [string]$scriptVersion = "v20220919"
@@ -37,7 +37,7 @@ Write-Host "[$(Get-Date -Format "dd/MM/yyyy_HH:mm:ss")] ### Début du script Che
 Function Mail
     {
     param(
-        [parameter()]
+        [parameter(Mandatory)]
         [string]$subject,
         [string]$body
     )
