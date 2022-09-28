@@ -1,13 +1,18 @@
-#=============================#
-#           Variables         #
-#=============================#
+<#
+.DESCRIPTION
+        Sauvegarde des GPO  
+        le script génère un fichier log et envoi une notification par mail avec le fichier log en pièce jointe
+.NOTES
+        Author: casimir69
+#>
+
 Import-Module ActiveDirectory
 
-$date = get-date -format dd-MM-yyyy #Récupération de la date du jour
-$GPOPath = “c:\GPOBackups\GPOBackups” #Définition du chemin de l'export
-$WMIPath = "C:\GPOBackups\GPOBackups\WMI_Full_Backup.csv" #Définition du fichier de sauvegarde des filtres WMI
+[datetime]$date = Get-date -format dd-MM-yyyy
+[string]$GPOPath = “D:\GPOBackups\$date” #Définition du chemin de l'export
+$WMIPath = "D:\GPOBackups\$date\WMI_Full_Backup.csv" #Définition du fichier de sauvegarde des filtres WMI
 
-Backup-Gpo -All -Path $GPOPath #Exportation des GPOs de production vers le chemin défini
+Backup-Gpo -All -Path $GPOPath #Export des GPO
 
 Get-ADObject -Filter 'objectClass -eq "msWMI-Som"' -Properties "msWMI-Name","msWMI-Parm1","msWMI-Parm2"| Select-Object "msWMI-Name","msWMI-Parm1","msWMI-Parm2"|export-csv $WMIPath -notypeinformation -delimiter ";" #Export des informations sur les filtres WMI
 
