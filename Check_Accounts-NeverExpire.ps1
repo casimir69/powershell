@@ -27,7 +27,7 @@ If ((Get-Module -Name ActiveDirectory -ErrorAction SilentlyContinue) -eq $null )
 [int]$nbrAccountNE = "0"
 [string]$env = MQT               #PROD or MQT
 [string]$domain = $env:USERDOMAIN
-[string]$logfile = "$PSScriptRoot\Checks_Account-NeverExpire_"+ $domain +".log"
+[string]$logfile = "$PSScriptRoot\Check_Account-NeverExpire_"+ $domain +".log"
 $users = Get-ADUser -Filter * -Properties Name, PasswordNeverExpires
 
 Add-Content $logfile "[$(Get-Date -Format "dd/MM/yyyy_HH:mm:ss")] ### Début du script Check_Accounts-NeverExpire.ps1 - $scriptVersion ###"
