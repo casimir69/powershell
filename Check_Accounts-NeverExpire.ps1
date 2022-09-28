@@ -30,6 +30,7 @@ If ((Get-Module -Name ActiveDirectory -ErrorAction SilentlyContinue) -eq $null )
 [string]$logfile = "$PSScriptRoot\Check_Account-NeverExpire_"+ $domain +".log"
 $users = Get-ADUser -Filter * -Properties Name, PasswordNeverExpires
 
+Add-Content $logfile "[$(Get-Date -Format "dd/MM/yyyy_HH:mm:ss")] ############################################################"
 Add-Content $logfile "[$(Get-Date -Format "dd/MM/yyyy_HH:mm:ss")] ### Début du script Check_Accounts-NeverExpire.ps1 - $scriptVersion ###"
 Write-Host "[$(Get-Date -Format "dd/MM/yyyy_HH:mm:ss")] ### Début du script Check_Accounts-NeverExpire.ps1 - $scriptVersion ###"
 
