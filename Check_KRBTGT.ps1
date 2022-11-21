@@ -10,13 +10,15 @@
 ##### module #####
 If ( (Get-Module -Name ActiveDirectory -ErrorAction SilentlyContinue) -eq $null )
 {
-    Try {
+    Try
+    {
         Import-Module ActiveDirectory
-        }
-        Catch {
-              Write-Error "Unable to load the module" -ErrorAction Continue
-              Write-Error $Error[1] -ErrorAction Continue
-              Exit 1
+    }
+    Catch
+    {
+        Write-Error "Unable to load the module" -ErrorAction Continue
+        Write-Error $Error[1] -ErrorAction Continue
+        Exit 1
     }
 }
 
@@ -34,7 +36,7 @@ Write-Host "[$(Get-Date -Format "dd/MM/yyyy_HH:mm:ss")] ### Début du script Che
 
 ##### fonction #####
 Function Mail
-    {
+{
     param(
         [parameter()]
         [string]$subject,
@@ -51,28 +53,28 @@ Function Mail
     Write-Host "[$(Get-Date -Format "dd/MM/yyyy_HH:mm:ss")] Sendind Report Email from $from to $to"
 
     Send-MailMessage -SmtpServer $smtpServer -Port $port -From $from -To $to -Bcc $bcc -Subject $subject -Body $body -bodyasHTML -Attachments $logfile -Encoding $mailEncoding
-    }
+}
 
 ##### script #####
 foreach ($krbtgt IN $accounts)
-    {
+{
     [string]$kname = $krbtgt.Name
     [Datetime]$kpls = $krbtgt.PasswordLastSet
 
     if ($krbtgt.pwdLastSet -lt $currentDate)
-        {
+    {
         Add-Content $logfile "[$(Get-Date -Format "dd/MM/yyyy_HH:mm:ss")] Il faut renouveler le password du compte $kname d'$domain qui date du $kpls (US date)"
         Write-Host "[$(Get-Date -Format "dd/MM/yyyy_HH:mm:ss")] Il faut renouveler le password du compte $kname d'$domain qui date du $kpls (US date)" -BackgroundColor DarkRed
         if ($mailreport -eq true)
-            {
+        {
             Mail "[$env][$domain] Compte krbtgt : Renouvellement du mot de passe" "Le mot de passe du compte krbtgt du domaine $domain.edf.fr a plus de 6 mois ($kpls US date), il faut le renouveller !"
-            }
         }
-        else
-            {
-            Add-Content $logfile "[$(Get-Date -Format "dd/MM/yyyy_HH:mm:ss")] Le mot de passe du compte $kname a moins de 6 mois"
-            Write-host "[$(Get-Date -Format "dd/MM/yyyy_HH:mm:ss")] Le mot de passe du compte $kname a moins de 6 mois"
-            }
     }
+    else
+    {
+        Add-Content $logfile "[$(Get-Date -Format "dd/MM/yyyy_HH:mm:ss")] Le mot de passe du compte $kname a moins de 6 mois"
+        Write-host "[$(Get-Date -Format "dd/MM/yyyy_HH:mm:ss")] Le mot de passe du compte $kname a moins de 6 mois"
+    }
+}
 Add-Content $logfile "[$(Get-Date -Format "dd/MM/yyyy_HH:mm:ss")] ### Fin du script Check_KRBTGT.ps1 ###"
 Write-Host "[$(Get-Date -Format "dd/MM/yyyy_HH:mm:ss")] ### Fin du script Check_KRBTGT.ps1 ###"
