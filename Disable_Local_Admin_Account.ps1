@@ -3,18 +3,17 @@
         Script de desactivation des comptes AL et -A sur le domaine sur lequel vous l'executez
 .DESCRIPTION
 	
-.EXAMPLE
-	n/c
-.NOTES
-	Ce script n'a pas besoin de permissions particulière
 #>
 $ErrorActionPreference = "Stop"
 
-If ( (Get-Module -Name ActiveDirectory -ErrorAction SilentlyContinue) -eq $null )
+If ((Get-Module -Name ActiveDirectory -ErrorAction SilentlyContinue) -eq $null)
 {
-    Try {
+    Try
+    {
         Import-Module ActiveDirectory
-    } Catch {
+    }
+    Catch
+    {
         Write-Error "Unable to load the module" -ErrorAction Continue
         Write-Error $Error[1] -ErrorAction Continue
         Exit 1
