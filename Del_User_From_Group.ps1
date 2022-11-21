@@ -2,7 +2,7 @@
 .DESCRIPTION
         Ce script Powershell permet de supprimer des users d'un groupe Active Directory en vérifiant sa présence au préalable
 .AUTHOR
-	Casimir69
+	casimir69
 #>
 
 $ErrorActionPreference = "Stop"
