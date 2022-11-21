@@ -1,7 +1,7 @@
 <#
 .DESCRIPTION
         Sauvegarde des GPO  
-        le script génère un fichier log et envoi une notification par mail avec le fichier log en pièce jointe
+        le script génère un fichier log
 .NOTES
         Author: casimir69
 #>
