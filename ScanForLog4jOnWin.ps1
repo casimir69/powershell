@@ -17,11 +17,11 @@ Add-Content $logfile "Script Full Path..................: $scriptFullPath"
 Add-Content $logfile ".................................."
 
 Foreach ($drive in $drives)
-  {
-  [string]$drove = $drive.Name +':\'
-  Add-Content $logfile "Scan $drove"
-  Get-ChildItem $drove -Recurse -Force -Include *log4j*.jar -ErrorAction SilentlyContinue | Add-Content $logfile
-  }
-  Add-Content $logfile "Fin du script...................."
+{
+    [string]$drove = $drive.Name +':\'
+    Add-Content $logfile "Scan $drove"
+    Get-ChildItem $drove -Recurse -Force -Include *log4j*.jar -ErrorAction SilentlyContinue | Add-Content $logfile
+}
+    Add-Content $logfile "Fin du script...................."
 
-  Move-Item -Path $logfile -Destination \\$fqdnDomainName\SYSVOL\$fqdnDomainName\scripts\Log4j\
+    Move-Item -Path $logfile -Destination \\$fqdnDomainName\SYSVOL\$fqdnDomainName\scripts\Log4j\
