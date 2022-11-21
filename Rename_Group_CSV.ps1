@@ -8,12 +8,14 @@
 #>
 
 ### module ###
-
-If ( (Get-Module -Name ActiveDirectory -ErrorAction SilentlyContinue) -eq $null )
+If ((Get-Module -Name ActiveDirectory -ErrorAction SilentlyContinue) -eq $null)
 {
-    Try {
+    Try
+    {
         Import-Module ActiveDirectory
-    } Catch {
+    }
+    Catch 
+    {
         Write-Error "Unable to load the module" -ErrorAction Continue
         Write-Error $Error[1] -ErrorAction Continue
         Exit 1
@@ -21,18 +23,18 @@ If ( (Get-Module -Name ActiveDirectory -ErrorAction SilentlyContinue) -eq $null 
 }
 
 ### variables ###
-$ImportGroups = Import-Csv "RenameGroups.csv" -delimiter ";"
+$importGroups = Import-Csv "RenameGroups.csv" -delimiter ";"
 
 ### script ###
-foreach ($Group in $ImportGroups)
+Foreach ($Group in $ImportGroups)
 {
     [string]$OldName = $Group.OldName
     [string]$NewName = $Group.NewName
     [string]$NewDescription = $Group.NewDescription
     $GroupInAD = Get-ADGroup -Identity $Group.OldName
 	
-    try
-   {
+    Try
+    {
         Write-Host $OldName + " in transformation..." -ForegroundColor Green
         Set-ADGroup -Identity $GroupInAD -SamAccountName $NewName -Description $NewDescription
         Rename-ADObject -Identity $GroupInAD -NewName $NewName
@@ -40,7 +42,7 @@ foreach ($Group in $ImportGroups)
         Write-Host "... next ..." -BackgroundColor Yellow
     }
 
-    catch
+    Catch
     {
 	"in Catch for $OldName"
         Write-Output "Error: $_"
