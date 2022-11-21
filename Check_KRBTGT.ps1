@@ -1,14 +1,14 @@
 <#
 .DESCRIPTION
         Check pwdLastSet date for krbtgt account (less than 6 month)
-        Vérifié dans Ping Castle si plus de 365 jours
+        Verify in Ping Castle software if more than 365 days
 
 .AUTHOR
         casimir69
 #>
 
 ##### module #####
-If ( (Get-Module -Name ActiveDirectory -ErrorAction SilentlyContinue) -eq $null )
+If ((Get-Module -Name ActiveDirectory -ErrorAction SilentlyContinue) -eq $null )
 {
     Try
     {
