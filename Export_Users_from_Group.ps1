@@ -2,15 +2,18 @@ param(
     $NomGroupe = ""
 )
 
-if( $NomGroupe -eq ""){
+If ($NomGroupe -eq "")
+{
     $NomGroupe = Read-Host "Quel est le nom du groupe ?"
 }
 
-try{
+Try
+{
     $GroupExists = Get-ADGroup -Identity $NomGroupe
 }
-catch{
-    Write-Warning "Le groupe demande n'existe pas !"
+Catch
+{
+    Write-Warning "Le groupe demandé n'existe pas !"
     exit 11
 }
 
