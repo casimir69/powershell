@@ -8,7 +8,7 @@
 #>
 
 ##### module #####
-If ((Get-Module -Name ActiveDirectory -ErrorAction SilentlyContinue) -eq $null )
+If ($null -eq (Get-Module -Name ActiveDirectory -ErrorAction SilentlyContinue))
 {
     Try
     {
