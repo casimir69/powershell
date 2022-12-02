@@ -7,7 +7,7 @@
         Author: casimir69
 #>
 
-##### module #####
+#region ##### load module #####
 If ((Get-Module -Name ActiveDirectory -ErrorAction SilentlyContinue) -eq $null)
 {
     Try
@@ -21,9 +21,10 @@ If ((Get-Module -Name ActiveDirectory -ErrorAction SilentlyContinue) -eq $null)
         Exit 1
     }
 }
+#endregion ##### load module #####
 
-##### variable #####
-[string]$scriptVersion = "v20220919"
+#region ##### variable #####
+[string]$scriptVersion = "v20221202"
 [bool]$mailreport = 0            #1 or 0 or True or False
 [int]$nbrAccount = "0"
 [int]$nbrAccountNE = "0"
@@ -31,12 +32,9 @@ If ((Get-Module -Name ActiveDirectory -ErrorAction SilentlyContinue) -eq $null)
 [string]$domain = $env:USERDOMAIN
 [string]$logfile = "$PSScriptRoot\Check_Account-NeverExpire_"+ $domain +".log"
 $users = Get-ADUser -Filter * -Properties Name, PasswordNeverExpires
+#end region ##### variable #####
 
-Add-Content $logfile "[$(Get-Date -Format "dd/MM/yyyy_HH:mm:ss")] ############################################################"
-Add-Content $logfile "[$(Get-Date -Format "dd/MM/yyyy_HH:mm:ss")] ### Début du script Check_Accounts-NeverExpire.ps1 - $scriptVersion ###"
-Write-Host "[$(Get-Date -Format "dd/MM/yyyy_HH:mm:ss")] ### Début du script Check_Accounts-NeverExpire.ps1 - $scriptVersion ###"
-
-##### fonction #####
+#region ##### fonction #####
 Function Mail
 {
     param(
@@ -56,8 +54,13 @@ Function Mail
 
     Send-MailMessage -SmtpServer $smtpServer -Port $port -From $from -To $to -Bcc $bcc -Subject $subject -Body $body -bodyasHTML -Attachments $logfile -Encoding $mailEncoding
 }
+#endregion ##### fonction #####
 
-##### script #####
+#region ##### main script #####
+Add-Content $logfile "[$(Get-Date -Format "dd/MM/yyyy_HH:mm:ss")] ############################################################"
+Add-Content $logfile "[$(Get-Date -Format "dd/MM/yyyy_HH:mm:ss")] ### Début du script Check_Accounts-NeverExpire.ps1 - $scriptVersion ###"
+Write-Host "[$(Get-Date -Format "dd/MM/yyyy_HH:mm:ss")] ### Début du script Check_Accounts-NeverExpire.ps1 - $scriptVersion ###"
+
 foreach ($user IN $users)
 {
     [string]$name = $user.SamAccountName
@@ -84,3 +87,4 @@ if ($nbrAccountNE -gt "0")
 }
 Add-Content $logfile "[$(Get-Date -Format "dd/MM/yyyy_HH:mm:ss")] ### Fin du script Check_Accounts-NeverExpire.ps1 - $nbrAccount comptes locaux ###"
 Write-Host "[$(Get-Date -Format "dd/MM/yyyy_HH:mm:ss")] ### Fin du script Check_Accounts-NeverExpire.ps1 - $nbrAccount comptes locaux ###"
+#endregion ##### main script #####
