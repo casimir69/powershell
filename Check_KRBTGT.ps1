@@ -7,7 +7,7 @@
         casimir69
 #>
 
-##### module #####
+#region ##### load module #####
 If ($null -eq (Get-Module -Name ActiveDirectory -ErrorAction SilentlyContinue))
 {
     Try
@@ -21,20 +21,19 @@ If ($null -eq (Get-Module -Name ActiveDirectory -ErrorAction SilentlyContinue))
         Exit 1
     }
 }
+#endregion ##### load module #####
 
-##### variable #####
-[string]$scriptVersion = "v20220919"
+#region ##### variable #####
+[string]$scriptVersion = "v20221202"
 [string]$domain = $env:USERDOMAIN
 [bool]$mailreport = 0            #1 or 0 or True or False
 [string]$env = MQT               #PROD or MQT
 [string]$currentDate = (Get-Date).Date.AddDays(-180).ToFileTime()
 [string]$logfile = "$PSScriptRoot\Check_KRBTGT_"+ $domain +".log"
 $accounts = Get-ADUser -Filter * -Properties Name, ServicePrincipalName, pwdLastSet, PasswordLastSet | Where-Object {$_.ServicePrincipalName -Like "kadmin/changepw"}
+#endregion ##### variable #####
 
-Add-Content $logfile "[$(Get-Date -Format "dd/MM/yyyy_HH:mm:ss")] ### Début du script Check_KRBTGT.ps1 - $scriptVersion ###"
-Write-Host "[$(Get-Date -Format "dd/MM/yyyy_HH:mm:ss")] ### Début du script Check_KRBTGT.ps1 - $scriptVersion ###"
-
-##### fonction #####
+#region ##### fonction #####
 Function Mail
 {
     param(
@@ -54,8 +53,14 @@ Function Mail
 
     Send-MailMessage -SmtpServer $smtpServer -Port $port -From $from -To $to -Bcc $bcc -Subject $subject -Body $body -bodyasHTML -Attachments $logfile -Encoding $mailEncoding
 }
+#endregion ##### fonction #####
 
-##### script #####
+#region ##### main #####
+Add-Content $logfile "[$(Get-Date -Format "dd/MM/yyyy_HH:mm:ss")] ##############################################################"
+Write-Host "[$(Get-Date -Format "dd/MM/yyyy_HH:mm:ss")] ##############################################################"
+Add-Content $logfile "[$(Get-Date -Format "dd/MM/yyyy_HH:mm:ss")] ### Début du script Check_KRBTGT.ps1 - $scriptVersion ###"
+Write-Host "[$(Get-Date -Format "dd/MM/yyyy_HH:mm:ss")] ### Début du script Check_KRBTGT.ps1 - $scriptVersion ###"
+
 foreach ($krbtgt IN $accounts)
 {
     [string]$kname = $krbtgt.Name
@@ -78,3 +83,4 @@ foreach ($krbtgt IN $accounts)
 }
 Add-Content $logfile "[$(Get-Date -Format "dd/MM/yyyy_HH:mm:ss")] ### Fin du script Check_KRBTGT.ps1 ###"
 Write-Host "[$(Get-Date -Format "dd/MM/yyyy_HH:mm:ss")] ### Fin du script Check_KRBTGT.ps1 ###"
+#endregion ##### main #####
