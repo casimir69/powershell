@@ -72,11 +72,11 @@ foreach ($user IN $users)
         Add-Content $logfile "[$(Get-Date -Format "dd/MM/yyyy_HH:mm:ss")] Le compte $name sur $domain a son mot de passe configuré en Never-Expire, merci de supprimer cette option."
         Write-Host "[$(Get-Date -Format "dd/MM/yyyy_HH:mm:ss")] Le compte $name sur $domain a son mot de passe configuré en Never-Expire, merci de supprimer cette option." -BackgroundColor DarkRed
     }
-        elseif ($state -like "$false")
-        {
-            Add-Content $logfile "[$(Get-Date -Format "dd/MM/yyyy_HH:mm:ss")] Le compte $name sur $domain est conforme aux exigences."
-            Write-host "[$(Get-Date -Format "dd/MM/yyyy_HH:mm:ss")] Le compte $name sur $domain est conforme aux exigences."
-        }
+    elseif ($state -like "$false")
+    {
+        Add-Content $logfile "[$(Get-Date -Format "dd/MM/yyyy_HH:mm:ss")] Le compte $name sur $domain est conforme aux exigences."
+        Write-host "[$(Get-Date -Format "dd/MM/yyyy_HH:mm:ss")] Le compte $name sur $domain est conforme aux exigences."
+    }
 }    
 if ($nbrAccountNE -gt "0")
 {
